@@ -6,3 +6,13 @@
 npm-debug.log*
 .DS_Store
 Thumbs.db
+dist/
+
+/src/generated/prisma
+
+# Configuracoes de ferramentas de IA
+.agents/
+.claude/
+.cursor/
+.devin/
+.windsurf/
