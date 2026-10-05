@@ -8,15 +8,40 @@ export async function createUserController(
   try {
     const { name, email, password, role } = req.body;
 
-    if (!name || !email || !password) {
+    if (
+      typeof name !== "string" ||
+      typeof email !== "string" ||
+      typeof password !== "string"
+    ) {
       return res.status(400).json({
         mensagem: "Nome, e-mail e senha são obrigatórios.",
       });
     }
 
+    const normalizedName = name.trim();
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (normalizedName.length < 2) {
+      return res.status(400).json({
+        mensagem: "O nome deve ter pelo menos 2 caracteres.",
+      });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      return res.status(400).json({
+        mensagem: "Informe um e-mail válido.",
+      });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        mensagem: "A senha deve ter pelo menos 8 caracteres.",
+      });
+    }
+
     const user = await createUser({
-      name,
-      email,
+      name: normalizedName,
+      email: normalizedEmail,
       password,
       role,
     });
