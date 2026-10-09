@@ -1,15 +1,15 @@
-﻿import bcrypt from "bcrypt";
+﻿
+import bcrypt from "bcrypt";
 import prisma from "../config/prisma";
 
 interface CreateUserData {
   name: string;
   email: string;
   password: string;
-  role?: string;
 }
 
 export async function createUser(data: CreateUserData) {
-  const { name, email, password, role = "BARBER" } = data;
+  const { name, email, password } = data;
 
   const existingUser = await prisma.user.findUnique({
     where: {
@@ -28,7 +28,6 @@ export async function createUser(data: CreateUserData) {
       name,
       email,
       passwordHash,
-      role,
     },
     select: {
       id: true,

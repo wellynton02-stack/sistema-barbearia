@@ -1,4 +1,5 @@
-﻿import { Request, Response } from "express";
+﻿
+import { Request, Response } from "express";
 import { createUser } from "../services/userService";
 
 export async function createUserController(
@@ -6,7 +7,7 @@ export async function createUserController(
   res: Response
 ) {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     if (
       typeof name !== "string" ||
@@ -43,7 +44,6 @@ export async function createUserController(
       name: normalizedName,
       email: normalizedEmail,
       password,
-      role,
     });
 
     return res.status(201).json(user);
