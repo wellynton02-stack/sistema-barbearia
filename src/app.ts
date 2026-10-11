@@ -1,6 +1,7 @@
-﻿import express from "express";
+import express from "express";
 import prisma from "./config/prisma";
 import userRoutes from "./routes/userRoutes";
+import authRoutes from "./routes/authRoutes";
 
 const app = express();
 
@@ -31,5 +32,6 @@ app.get("/teste-banco", async (req, res) => {
 });
 
 app.use("/usuarios", userRoutes);
+app.use("/auth", authRoutes);
 
 export default app;

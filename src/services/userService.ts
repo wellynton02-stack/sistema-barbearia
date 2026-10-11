@@ -1,20 +1,20 @@
-﻿
-import bcrypt from "bcrypt";
+﻿import bcrypt from "bcrypt";
 import prisma from "../config/prisma";
+
+type UserRole = "CLIENT" | "BARBER";
 
 interface CreateUserData {
   name: string;
   email: string;
   password: string;
+  role?: UserRole;
 }
 
 export async function createUser(data: CreateUserData) {
-  const { name, email, password } = data;
+  const { name, email, password, role = "CLIENT" } = data;
 
   const existingUser = await prisma.user.findUnique({
-    where: {
-      email,
-    },
+    where: { email },
   });
 
   if (existingUser) {
@@ -23,11 +23,12 @@ export async function createUser(data: CreateUserData) {
 
   const passwordHash = await bcrypt.hash(password, 12);
 
-  const user = await prisma.user.create({
+  return prisma.user.create({
     data: {
       name,
       email,
       passwordHash,
+      role,
     },
     select: {
       id: true,
@@ -39,6 +40,4 @@ export async function createUser(data: CreateUserData) {
       updatedAt: true,
     },
   });
-
-  return user;
 }

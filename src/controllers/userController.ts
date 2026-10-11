@@ -1,5 +1,4 @@
-﻿
-import { Request, Response } from "express";
+﻿import { Request, Response } from "express";
 import { createUser } from "../services/userService";
 
 export async function createUserController(
@@ -7,7 +6,7 @@ export async function createUserController(
   res: Response
 ) {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (
       typeof name !== "string" ||
@@ -16,6 +15,16 @@ export async function createUserController(
     ) {
       return res.status(400).json({
         mensagem: "Nome, e-mail e senha são obrigatórios.",
+      });
+    }
+
+    if (
+      role !== undefined &&
+      role !== "CLIENT" &&
+      role !== "BARBER"
+    ) {
+      return res.status(400).json({
+        mensagem: "Perfil inválido. Use CLIENT ou BARBER.",
       });
     }
 
@@ -44,6 +53,7 @@ export async function createUserController(
       name: normalizedName,
       email: normalizedEmail,
       password,
+      role,
     });
 
     return res.status(201).json(user);
